@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "strict": true,
+    "lib": ["es2020"],
+    "baseUrl": "src",
+    "outDir": "dist",
+    "esModuleInterop": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["**/*.test.ts", "**/__snapshot__/*"]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@kt-graph/cli",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "author": "creasty",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "kt-graph": "./bin/kt-graph.js"
+  },
+  "scripts": {
+    "dev": "node -r esbuild-register ./src/index.ts",
+    "test": "jest",
+    "build": "ts-node build.ts"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "fast-glob": "^3.3.1",
+    "graphviz": "^0.0.9",
+    "@kt-graph/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/graphviz": "^0.0.35",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.8",
+    "esbuild": "^0.18.19",
+    "esbuild-register": "^3.4.2",
+    "eslint": "^8.47.0",
+    "jest": "^29.6.2",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1"
+  }
+}
