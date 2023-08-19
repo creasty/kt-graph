@@ -1,37 +1,38 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import path from "path";
 import graphviz from "graphviz";
-import { DependencyTableRepo } from "./DependencyTableRepo";
 import { DependencyGraph, createIncludeFilter, createUnifyFilter } from "@kt-graph/core";
+import { Config, fetchProject } from "./config";
+import { loadTable } from "cache";
 
-const CONFIG_FILE_NAME = "kt-graph.json";
+export function runGraph(
+  config: Config,
+  params: {
+    projectName: string;
+    output: string;
+    query?: RegExp;
+    exclude?: RegExp;
+    forwardDepth: number;
+    inverseDepth: number;
+    cluster: boolean;
+    filter: boolean;
+  }
+) {
+  const project = fetchProject(config, params.projectName);
 
-export function runGraph(params: {
-  dir: string;
-  output: string;
-  query?: RegExp;
-  exclude?: RegExp;
-  forwardDepth: number;
-  inverseDepth: number;
-  cluster: boolean;
-  filter: boolean;
-}) {
-  const repo = new DependencyTableRepo();
-  const table = repo.find(params.dir);
-  if (!table) {
-    console.error(`No cache data found for ${path.resolve(params.dir)}.`);
+  const cache = loadTable(config, project.$name);
+  if (!cache) {
+    console.error(`No cache data found for '${project.$name}'.`);
     console.error(`Run \`analyze\` command first.`);
     process.exit(1);
   }
 
-  const config = findConfigFile(params.dir);
-
-  table.applyFilters({
-    include: params.filter ? createIncludeFilter(config) : undefined,
-    unify: createUnifyFilter(config),
+  cache.table.applyFilters({
+    include: params.filter && project.includePatterns ? createIncludeFilter(project.includePatterns) : undefined,
+    unify: project.unifyRules ? createUnifyFilter(project.unifyRules) : undefined,
   });
 
-  const graph = new DependencyGraph(table.data);
+  const graph = new DependencyGraph(cache.table.data);
   const graphInfo = graph.calculate({
     query: params.query,
     exclude: params.exclude,
@@ -60,18 +61,6 @@ export function runGraph(params: {
       console.error("Invalid output file extension");
       process.exit(1);
     }
-  }
-}
-
-function findConfigFile(dir: string) {
-  let baseDir = path.resolve(dir);
-  while (baseDir && baseDir !== "/") {
-    const configFilePath = path.resolve(baseDir, CONFIG_FILE_NAME);
-    if (existsSync(configFilePath)) {
-      const json = readFileSync(configFilePath, "utf8");
-      return JSON.parse(json);
-    }
-    baseDir = path.dirname(baseDir);
   }
 }
 

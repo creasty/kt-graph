@@ -1,34 +1,25 @@
 import type { DependencyTableFilters } from "./DependencyTable";
 
-export function createIncludeFilter(params: {
-  includePatterns?: string[];
-  excludePatterns?: string[];
-}): DependencyTableFilters["include"] {
-  const createFilter = (patterns: string[] | undefined) => {
-    if (!patterns?.length) return;
+export function createIncludeFilter(includePatterns: string[]): DependencyTableFilters["include"] {
+  if (!includePatterns.length) return;
 
-    const regexpPatterns = patterns.map(convertIdentPatternToRegexp);
-
-    return (ident: string) => {
-      return regexpPatterns.some((filter) => filter.test(ident));
+  const rules = includePatterns.map((pattern) => {
+    const negated = pattern.startsWith("!");
+    return {
+      regexp: convertIdentPatternToRegexp(negated ? pattern.slice(1) : pattern),
+      expected: !negated,
     };
-  };
+  });
 
-  const include = createFilter(params.includePatterns);
-  const exclude = createFilter(params.excludePatterns);
-  if (!include && !exclude) return;
-
-  return (ident: string): boolean => {
-    if (include && !include(ident)) return false;
-    if (exclude && exclude(ident)) return false;
-    return true;
+  return (ident: string) => {
+    return rules.some((rule) => rule.regexp.test(ident) === rule.expected);
   };
 }
 
-export function createUnifyFilter(params: { unifyRules?: [string, string][] }): DependencyTableFilters["unify"] {
-  if (!params.unifyRules?.length) return;
+export function createUnifyFilter(unifyRules: [string, string][]): DependencyTableFilters["unify"] {
+  if (!unifyRules.length) return;
 
-  const substitutions = params.unifyRules.map(([pattern, replacement]) => {
+  const substitutions = unifyRules.map(([pattern, replacement]) => {
     return { regexp: new RegExp(pattern), replacement };
   });
 

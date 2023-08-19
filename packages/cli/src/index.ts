@@ -1,25 +1,27 @@
 import { Command } from "commander";
+import { loadConfig } from "./config";
 import { runAnalyze } from "./analyze";
 import { runGraph } from "./graph";
 
+const workingDir = process.cwd();
+
 const program = new Command();
 
-program
-  .name("kotlin-class-graph")
-  .description("Generate a graph of Kotlin classes and their dependencies")
-  .version("0.0.1");
+program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.1");
 
 program
   .command("analyze")
-  .argument("<dir>", "file glob pattern")
-  .action((dir) => {
-    runAnalyze({
-      dir,
+  .argument("<project>", "project name")
+  .action((project) => {
+    const config = loadConfig(workingDir);
+    runAnalyze(config, {
+      projectName: project,
     });
   });
+
 program
   .command("graph")
-  .argument("<dir>", "file glob pattern")
+  .argument("<project>", "project name")
   .option("-o, --output <file>", "output file", "graph.pdf")
   .option("-q, --query <regexp>", "query string")
   .option("-e, --exclude <regexp>", "exclude query string")
@@ -27,9 +29,10 @@ program
   .option("--inverse-depth <level>", "depth of inverse dependency", "3")
   .option("-c, --cluster", "visualize cluster", false)
   .option("-F, --no-filter", "disable filter", false)
-  .action((dir, options) => {
-    runGraph({
-      dir,
+  .action((projectName, options) => {
+    const config = loadConfig(workingDir);
+    runGraph(config, {
+      projectName,
       output: options.output,
       query: options.query ? new RegExp(options.query) : undefined,
       exclude: options.exclude ? new RegExp(options.exclude) : undefined,

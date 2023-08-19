@@ -17,12 +17,20 @@ export type DependencyTableFilters = {
   unify?: (ident: string) => string;
 };
 
+type TableData = Map<string, Set<string>>;
+type ReadonlyTableData = ReadonlyMap<string, ReadonlySet<string>>;
+
 export class DependencyTable {
-  #table = new Table<string, Set<string>>(null, () => new Set());
+  #table: Table<string, Set<string>>;
   #finalized = false;
   #filterApplied = false;
 
-  get data(): ReadonlyMap<string, ReadonlySet<string>> {
+  constructor(data?: TableData) {
+    this.#table = new Table(data ?? null, () => new Set());
+    this.#finalized = !!data;
+  }
+
+  get data(): ReadonlyTableData {
     return this.#table;
   }
 
@@ -130,42 +138,4 @@ export class DependencyTable {
     this.#table = new Table(null, current.initializeValue);
     return current;
   }
-
-  loadJson(jsonString: string) {
-    this.#checkFinalized(false);
-    this.#finalized = true;
-    this.#table = new Table(JSON.parse(jsonString, jsonReviver), this.#table.initializeValue);
-  }
-
-  toJson() {
-    return JSON.stringify(this.#table, jsonReplacer, "  ");
-  }
-}
-
-function jsonReviver(this: any, _key: string, value: any): any {
-  if (value && typeof value === "object") {
-    if (value.$type === "Map") {
-      return new Map(value.value);
-    }
-    if (value.$type === "Set") {
-      return new Set(value.value);
-    }
-  }
-  return value;
-}
-
-function jsonReplacer(this: any, _key: string, value: any): any {
-  if (value instanceof Map) {
-    return {
-      $type: "Map",
-      value: [...value],
-    };
-  }
-  if (value instanceof Set) {
-    return {
-      $type: "Set",
-      value: [...value],
-    };
-  }
-  return value;
 }

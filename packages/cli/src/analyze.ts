@@ -1,12 +1,15 @@
 import { globSync } from "fast-glob";
 import { readFileSync } from "fs";
-import { DependencyTableRepo } from "./DependencyTableRepo";
 import { DependencyTable, FileAnalyzer } from "@kt-graph/core";
+import { Config, fetchProject } from "./config";
+import { saveTable } from "cache";
 
-export function runAnalyze(params: { dir: string }) {
+export function runAnalyze(config: Config, params: { projectName: string }) {
+  const project = fetchProject(config, params.projectName);
+
   const table = new DependencyTable();
 
-  const files = globSync(`${params.dir}/**/*.kt`);
+  const files = globSync(project.files);
   files.forEach((file) => {
     const sourceCode = readFileSync(file, "utf8");
     const analyzer = new FileAnalyzer(table);
@@ -19,6 +22,5 @@ export function runAnalyze(params: { dir: string }) {
     console.log("Could not resolve some refs:", info.unresolvableRefs);
   }
 
-  const repo = new DependencyTableRepo();
-  repo.save(params.dir, table);
+  saveTable(config, params.projectName, table);
 }

@@ -17,10 +17,13 @@
     "build": "ts-node build.ts"
   },
   "dependencies": {
+    "@kt-graph/core": "workspace:*",
+    "@types/js-yaml": "^4.0.5",
     "commander": "^11.0.0",
     "fast-glob": "^3.3.1",
     "graphviz": "^0.0.9",
-    "@kt-graph/core": "workspace:*"
+    "js-yaml": "^4.1.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@types/graphviz": "^0.0.35",
