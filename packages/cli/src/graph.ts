@@ -48,18 +48,14 @@ export function runGraph(
 
   const g = makeGraphviz(graph, { cluster: params.cluster });
 
-  switch (path.extname(params.output)) {
-    case ".dot": {
+  const format = path.extname(params.output).slice(1);
+  switch (format) {
+    case "dot": {
       writeFileSync(params.output, g.to_dot());
       break;
     }
-    case ".pdf": {
-      g.output("pdf", params.output);
-      break;
-    }
     default: {
-      console.error("Invalid output file extension");
-      process.exit(1);
+      g.output(format, params.output);
     }
   }
 }

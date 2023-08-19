@@ -12,7 +12,7 @@ export function createIncludeFilter(includePatterns: string[]): DependencyTableF
   });
 
   return (ident: string) => {
-    return rules.some((rule) => rule.regexp.test(ident) === rule.expected);
+    return rules.every((rule) => rule.regexp.test(ident) === rule.expected);
   };
 }
 

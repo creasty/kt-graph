@@ -4,7 +4,7 @@ type ReadonlyDependencyTable = ReadonlyMap<string, ReadonlySet<string>>;
 
 type Node = {
   id: string;
-  matching: boolean;
+  matching?: boolean;
 };
 
 type Edge = {
@@ -17,7 +17,7 @@ export class DependencyGraph {
   #table: ReadonlyDependencyTable;
 
   #calculated = false;
-  #matchingIdentSet = new Set<string>();
+  #matchingIdentSet?: Set<string>;
   #nodes = new Set<string>();
   #edges = new Map<string, Edge>();
 
@@ -45,22 +45,25 @@ export class DependencyGraph {
       }
     }
 
+    const matchingIdentSet = new Set<string>();
     for (const ident of allIdentSet) {
       if (params.exclude?.test(ident)) continue;
       if (params.query && !params.query.test(ident)) continue;
-      this.#matchingIdentSet.add(ident);
+      matchingIdentSet.add(ident);
     }
+    const isPartial = matchingIdentSet.size !== allIdentSet.size;
 
-    if (this.#matchingIdentSet.size !== allIdentSet.size) {
+    if (isPartial) {
       const recurse = recurseFactory({
         nodes: this.#nodes,
         edges: this.#edges,
         exclude: params.exclude,
       });
-      for (const ident of this.#matchingIdentSet) {
+      for (const ident of matchingIdentSet) {
         recurse(false, this.#table, ident, params.forwardDepth);
         recurse(true, inverseTable, ident, params.inverseDepth);
       }
+      this.#matchingIdentSet = matchingIdentSet;
     } else {
       this.#nodes = allIdentSet;
       for (const [ident, deps] of this.#table) {
@@ -78,7 +81,7 @@ export class DependencyGraph {
     }
 
     return {
-      matchingNodesCount: this.#matchingIdentSet.size,
+      matchingNodesCount: matchingIdentSet.size,
       nodesCount: this.#nodes.size,
       edgesCount: this.#edges.size,
     };

@@ -25,17 +25,19 @@ program
   .option("-o, --output <file>", "output file", "graph.pdf")
   .option("-q, --query <regexp>", "query string")
   .option("-e, --exclude <regexp>", "exclude query string")
+  .option("-i, --case-insensitive", "use case insensitive mode for --query and --exclude", false)
   .option("--forward-depth <level>", "depth of forward dependency", "3")
   .option("--inverse-depth <level>", "depth of inverse dependency", "3")
   .option("-c, --cluster", "visualize cluster", false)
   .option("-F, --no-filter", "disable filter", false)
   .action((projectName, options) => {
     const config = loadConfig(workingDir);
+    const regexpFlags = options.caseInsensitive ? "i" : "";
     runGraph(config, {
       projectName,
       output: options.output,
-      query: options.query ? new RegExp(options.query) : undefined,
-      exclude: options.exclude ? new RegExp(options.exclude) : undefined,
+      query: options.query ? new RegExp(options.query, regexpFlags) : undefined,
+      exclude: options.exclude ? new RegExp(options.exclude, regexpFlags) : undefined,
       forwardDepth: parseInt(options.forwardDepth, 10),
       inverseDepth: parseInt(options.inverseDepth, 10),
       cluster: !!options.cluster,
