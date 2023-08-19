@@ -2,6 +2,12 @@
 
 Analyze & visualize class/type dependency of Kotlin codebase.
 
+**Example: [github.com/JetBrains/Exposed](https://github.com/JetBrains/Exposed)**
+
+| Full | Query for 'transaction' |
+|---|---|
+| ![](./example/exposed_full.svg) | ![](./example/exposed_queried.svg) |
+
 ## Use library
 
 ```sh
@@ -14,6 +20,26 @@ npm i @kt-graph/core
 pnpm i -g @kt-graph/cli
 
 # Why not npm? Refer the 'Known issues' below.
+```
+
+### Config
+
+Create `kt-graph.yml` at your project root directory.
+
+```yml
+version: 1
+
+projects:
+  all:
+    files:
+      - ./exposed-core/src/main/kotlin/**/*.kt
+      - ./exposed-crypt/src/main/kotlin/**/*.kt
+      - ./exposed-dao/src/main/kotlin/**/*.kt
+    includePatterns:
+      - "org.jetbrains.exposed.**"
+    unifyRules:
+      - ["\\.Companion(\\.|$)", ""]
+      - ["(exposed\\.sql\\.Op)\\.\\w+", "$1"]
 ```
 
 ## Known issues
