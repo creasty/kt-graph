@@ -40,8 +40,6 @@ export function convertIdentPatternToRegexp(str: string): RegExp {
     const c = str[i];
     switch (c) {
       case "*": {
-        // Move over all consecutive "*"'s.
-        // Also store the previous and next characters
         const prevChar = str[i - 1];
         let starCount = 1;
         while (str[i + 1] === "*") {
@@ -51,9 +49,9 @@ export function convertIdentPatternToRegexp(str: string): RegExp {
         const nextChar = str[i + 1];
 
         const isDouble = starCount > 1;
-        const isBoundedBoth = (prevChar === "." || !prevChar) && (nextChar === "." || !nextChar);
+        const isBounded = (prevChar === "." || !prevChar) && (nextChar === "." || !nextChar);
 
-        if (isBoundedBoth) {
+        if (isBounded) {
           if (isDouble) {
             source += "((\\.|\\b)(\\w+(\\.|\\b))*)?";
           } else {
