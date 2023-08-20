@@ -1,8 +1,23 @@
 {
   "name": "@kt-graph/core",
-  "version": "0.0.7",
-  "description": "",
-  "keywords": [],
+  "version": "0.0.8",
+  "description": "Analyze & visualize class/type dependency of Kotlin codebase",
+  "homepage": "https://github.com/creasty/kt-graph",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creasty/kt-graph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/creasty/kt-graph/issues"
+  },
+  "keywords": [
+    "visualization",
+    "kotlin",
+    "tree-sitter",
+    "graph",
+    "analyzer",
+    "dependencies"
+  ],
   "author": "creasty",
   "license": "MIT",
   "main": "dist/index.cjs.js",

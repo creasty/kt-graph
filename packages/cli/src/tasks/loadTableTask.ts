@@ -14,13 +14,13 @@ export type LoadTableTaskContext = Partial<{
   table?: DependencyTable;
 }>;
 
-export function loadTableTask(params: { autoAnalyze: boolean }): ListrTask<LoadTableTaskContext, ListrDefaultRenderer> {
+export function loadTableTask(params: { update: boolean }): ListrTask<LoadTableTaskContext, ListrDefaultRenderer> {
   return {
     title: "Loading dependency table",
     enabled: (ctx) => Boolean(ctx.config && ctx.project),
     task: async (ctx, task) => {
-      let autoAnalyze = params.autoAnalyze;
-      if (autoAnalyze) {
+      let update = params.update;
+      if (update) {
         task.title = "Creating dependency table";
       } else {
         const cache = loadTable(ctx.config!, ctx.project!.$name);
@@ -31,14 +31,14 @@ export function loadTableTask(params: { autoAnalyze: boolean }): ListrTask<LoadT
           task.output = `No cache found`;
         }
         if (!cache) {
-          autoAnalyze = await task.prompt<boolean>({
+          update = await task.prompt<boolean>({
             type: "Toggle",
             message: "Would you like to analyze now?",
           });
         }
       }
 
-      if (autoAnalyze) {
+      if (update) {
         return task.newListr([analyzeProjectTask(), saveTableTask()], {
           rendererOptions: {
             collapseSubtasks: false,

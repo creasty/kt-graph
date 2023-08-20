@@ -46,15 +46,15 @@ program
 
 program
   .command("graph")
-  .description("Visualize a dependency graph")
+  .description("Create a dependency graph")
   .argument("<project>", "project name")
   .option("-o, --output <file>", "output file path", "graph.pdf")
   .option("-q, --query <regexp>", "query string")
   .option("-e, --exclude <regexp>", "exclude query string")
-  .option("-c, --cluster", "visualize cluster", false)
+  .option("-c, --cluster", "enable cluster layout", false)
   .option("--forward-depth <level>", "depth of forward dependencies", "3")
   .option("--inverse-depth <level>", "depth of inverse dependencies", "3")
-  .option("--analyze", "analyze without cache", false)
+  .option("--update", "run analyze command and update a dependency table", false)
   .action(async (projectName: string, options) => {
     const workingDir = process.cwd();
 
@@ -65,7 +65,7 @@ program
           projectName,
         }),
         loadTableTask({
-          autoAnalyze: options.analyze,
+          update: options.update,
         }),
         applyTableFilterTask(),
         calculateGraphTask({

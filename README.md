@@ -14,16 +14,14 @@ Analyze & visualize class/type dependency of Kotlin codebase.
 npm i @kt-graph/core
 ```
 
-## CLI
+## Use CLI
 
 ```sh
 pnpm i -g @kt-graph/cli
 ```
 <sup>Wondering why not **npm**? - Read [Known issues](#known-issues) for more details.</sup>
 
-```sh-session
-$ kt-graph -h
-```
+### Synopsis
 
 You have two primary commands to use:
 
@@ -44,7 +42,7 @@ Options:
 $ kt-graph graph -h
 Usage: kt-graph graph [options] <project>
 
-Visualize a dependency graph
+Create a dependency graph
 
 Arguments:
   project                  project name
@@ -53,10 +51,10 @@ Options:
   -o, --output <file>      output file path (default: "graph.pdf")
   -q, --query <regexp>     query string
   -e, --exclude <regexp>   exclude query string
-  -c, --cluster            visualize cluster (default: false)
+  -c, --cluster            enable cluster layout (default: false)
   --forward-depth <level>  depth of forward dependencies (default: "3")
   --inverse-depth <level>  depth of inverse dependencies (default: "3")
-  --analyze                analyze without cache (default: false)
+  --update                 run analyze command and update a dependency table (default: false)
   -h, --help               display help for command
 ```
 
