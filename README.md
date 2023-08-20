@@ -21,17 +21,17 @@ pnpm i -g @kt-graph/cli
 ```
 <sup>Wondering why not **npm**? - Check [Known issues](#known-issues) below for details.</sup>
 
-Quick start with:
-
 ```sh-session
 $ kt-graph -h
 ```
 
-There are mainly two commands available:
+You have two primary commands to use:
 
 ```sh-session
 $ kt-graph analyze -h
 Usage: kt-graph analyze [options] <project>
+
+Analyze and create a dependency table
 
 Arguments:
   project     project name
@@ -44,47 +44,29 @@ Options:
 $ kt-graph graph -h
 Usage: kt-graph graph [options] <project>
 
+Visualize a dependency graph
+
 Arguments:
   project                  project name
 
 Options:
-  -o, --output <file>      output file (default: "graph.pdf")
+  -o, --output <file>      output file path (default: "graph.pdf")
   -q, --query <regexp>     query string
   -e, --exclude <regexp>   exclude query string
-  -i, --case-insensitive   use case insensitive mode for --query and --exclude (default: false)
-  --forward-depth <level>  depth of forward dependency (default: "3")
-  --inverse-depth <level>  depth of inverse dependency (default: "3")
+  -i, --case-insensitive   use case insensitive mode for -q and -e (default: false)
   -c, --cluster            visualize cluster (default: false)
-  -F, --no-filter          disable filter
+  --forward-depth <level>  depth of forward dependencies (default: "3")
+  --inverse-depth <level>  depth of inverse dependencies (default: "3")
+  --analyze                analyze without cache (default: false)
   -h, --help               display help for command
 ```
 
 ### Configuration file
 
-Create a `kt-graph.yml` at the root of your project. Here's a quick peek into its structure:
+Create a `kt-graph.yml` at the root of your project.
 
-```typescript
-type Config = {
-  version: 1; // Constant
-  projects: Record<ProjectName, Project>;
-};
-
-type ProjectName = string;
-
-type Project = {
-  files: FileGlob[],
-  includePatterns?: IdentifierPattern[];
-  unifyRules?: [RegExpString, RegExpReplacement][];
-};
-
-type FileGlob = string;
-
-type IdentifierPattern = string;
-
-type RegExpString = string;
-
-type RegExpReplacement = string;
-```
+Schema:
+https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json
 
 ## Example in action
 
@@ -119,22 +101,39 @@ projects:
 
 ```sh-session
 $ kt-graph analyze all
-Analyzed ./exposed-core/src/main/kotlin/org/jetbrains/exposed/sql/AbstractQuery.kt
-Analyzed ./exposed-core/src/main/kotlin/org/jetbrains/exposed/sql/Alias.kt
-Analyzed ./exposed-core/src/main/kotlin/org/jetbrains/exposed/sql/Column.kt (with error)
-Analyzed ./exposed-core/src/main/kotlin/org/jetbrains/exposed/sql/ColumnDiff.kt
-...(omitted)
+✔ Load config
+✔ Analyzing project: all
+  › Analyzed 85 files.
+    Encountered 9 errors.
+    Found 132 unresolvable references.
+✔ Saving dependency table
 ```
 
 4\. Create a graph with various options.
 
 ```sh-session
-$ kt-graph graph all -c -q 'math' -i
-Matching nodes: 18
-Total nodes: 45
-Total edges: 78
+$ kt-graph graph all -o full.svg -c
+✔ Load config
+✔ Loading dependency table
+  › Cache found: 2023-08-20T05:09:35.377Z
+✔ Applying table filters
+✔ Calculating graph
+  › Total nodes: 335
+    Total edges: 1001
+✔ Exporting graph
+  › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/full.svg'
 
-$ open graph.pdf
+$ kt-graph graph all -o math.svg -c -q 'math' -i
+✔ Load config
+✔ Loading dependency table
+  › Cache found: 2023-08-20T05:09:35.377Z
+✔ Applying table filters
+✔ Calculating graph
+  › Matching nodes: 18
+    Total nodes: 45
+    Total edges: 78
+✔ Exporting graph
+  › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/math.svg'
 ```
 
 ## Known issues

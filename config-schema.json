@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$ref": "#/definitions/Config",
+  "definitions": {
+    "Config": {
+      "description": "Root object of configuration file",
+      "type": "object",
+      "required": ["version", "projects"],
+      "properties": {
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "projects": {
+          "type": "object",
+          "propertyNames": true,
+          "patternProperties": {
+            "/^[a-zA-Z0-9_-]+$/": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        }
+      }
+    },
+    "Project": {
+      "description": "Project configuration",
+      "type": "object",
+      "required": ["files", "includePatterns"],
+      "properties": {
+        "files": {
+          "description": "List of files to process",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FileGlob"
+          }
+        },
+        "includePatterns": {
+          "description": "List of identifier patterns to include in the output",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TypeNamePattern"
+          }
+        },
+        "unifyRules": {
+          "description": "List of rules to unify identifiers",
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/UnifyRuleMatcher"
+            },
+            {
+              "$ref": "#/definitions/UnifyRuleReplacement"
+            }
+          ]
+        }
+      }
+    },
+    "FileGlob": {
+      "description": "File glob pattern",
+      "type": "string",
+      "minLength": 1
+    },
+    "TypeNamePattern": {
+      "description": "Glob-like syntax for Kotlin type names",
+      "type": "string",
+      "minLength": 1
+    },
+    "UnifyRuleMatcher": {
+      "description": "Regular expression for type names",
+      "type": "string",
+      "minLength": 1
+    },
+    "UnifyRuleReplacement": {
+      "description": "Replacement string for type names",
+      "type": "string"
+    }
+  }
+}
