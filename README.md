@@ -10,11 +10,15 @@ Analyze & visualize class/type dependency of Kotlin codebase.
 
 ## Use as a library
 
+[![npm version](https://badge.fury.io/js/@kt-graph%2Fcore.svg)](https://www.npmjs.com/package/@kt-graph/core)
+
 ```sh
 npm i @kt-graph/core
 ```
 
 ## Use CLI
+
+[![npm version](https://badge.fury.io/js/@kt-graph%2Fcli.svg)](https://www.npmjs.com/package/@kt-graph/cli)
 
 ```sh
 pnpm i -g @kt-graph/cli
