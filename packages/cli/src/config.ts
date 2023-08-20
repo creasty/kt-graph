@@ -12,7 +12,7 @@ export type ProjectName = z.infer<typeof ProjectName>;
 const Project = z.object({
   $name: ProjectName.default("_"),
   files: z.array(z.string().nonempty()).nonempty(),
-  includePatterns: z.array(z.string().nonempty()).nonempty(),
+  typeNames: z.array(z.string().nonempty()).nonempty(),
   unifyRules: z.array(z.tuple([z.string().nonempty(), z.string()])).optional(),
 });
 export type Project = z.infer<typeof Project>;

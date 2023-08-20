@@ -31,7 +31,7 @@
     "Project": {
       "description": "Project configuration",
       "type": "object",
-      "required": ["files", "includePatterns"],
+      "required": ["files", "typeNames"],
       "properties": {
         "files": {
           "description": "List of files to process",
@@ -43,8 +43,8 @@
             "minLength": 1
           }
         },
-        "includePatterns": {
-          "description": "List of identifier patterns to include in the output.\nRead more at https://github.com/creasty/kt-graph/blob/master/packages/core/src/filters.test.ts",
+        "typeNames": {
+          "description": "List of type names to include in the output.\nRead more at https://github.com/creasty/kt-graph/blob/master/packages/core/src/filters.test.ts",
           "type": "array",
           "items": {
             "description": "Glob-like syntax for Kotlin type names",

@@ -14,7 +14,7 @@ export function applyTableFilterTask(): ListrTask<ApplyTableFiltersTaskContext, 
     enabled: (ctx) => Boolean(ctx.project && ctx.table),
     task: async (ctx, task) => {
       ctx.table!.applyFilters({
-        include: createIncludeFilter(ctx.project!.includePatterns),
+        include: createIncludeFilter(ctx.project!.typeNames),
         unify: ctx.project!.unifyRules ? createUnifyFilter(ctx.project!.unifyRules) : undefined,
       });
       task.output = "Filters applied";

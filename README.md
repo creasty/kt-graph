@@ -97,7 +97,7 @@ projects:
       - ./exposed-core/src/main/kotlin/**/*.kt
       - ./exposed-crypt/src/main/kotlin/**/*.kt
       - ./exposed-dao/src/main/kotlin/**/*.kt
-    includePatterns:
+    typeNames:
       - "org.jetbrains.exposed.**"
     unifyRules:
       - ["\\.Companion(\\.|$)", ""]
