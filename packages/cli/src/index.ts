@@ -1,48 +1,83 @@
 import { Command } from "commander";
-import { loadConfig } from "./config";
-import { runAnalyze } from "./analyze";
-import { runGraph } from "./graph";
-
-const workingDir = process.cwd();
+import { Listr } from "listr2";
+import { loadConfigTask } from "tasks/loadConfigTask";
+import { analyzeProjectTask } from "tasks/analyzeProjectTask";
+import { saveTableTask } from "tasks/saveTableTask";
+import { loadTableTask } from "tasks/loadTableTask";
+import { applyTableFilterTask } from "tasks/applyTableFiltersTask";
+import { calculateGraphTask } from "tasks/calculateGraphTask";
+import { exportGraphTask } from "tasks/exportGraphTask";
 
 const program = new Command();
 
-program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.1");
+program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.3");
 
 program
   .command("analyze")
+  .description("Analyze and create a dependency table")
   .argument("<project>", "project name")
-  .action((project) => {
-    const config = loadConfig(workingDir);
-    runAnalyze(config, {
-      projectName: project,
-    });
+  .action(async (projectName: string) => {
+    const workingDir = process.cwd();
+
+    const tasks = new Listr<any>([
+      loadConfigTask({
+        workingDir,
+        projectName,
+      }),
+      analyzeProjectTask(),
+      saveTableTask(),
+    ]);
+
+    try {
+      await tasks.run();
+    } catch (e) {
+      process.exit(1);
+    }
   });
 
 program
   .command("graph")
+  .description("Visualize a dependency graph")
   .argument("<project>", "project name")
-  .option("-o, --output <file>", "output file", "graph.pdf")
+  .option("-o, --output <file>", "output file path", "graph.pdf")
   .option("-q, --query <regexp>", "query string")
   .option("-e, --exclude <regexp>", "exclude query string")
-  .option("-i, --case-insensitive", "use case insensitive mode for --query and --exclude", false)
-  .option("--forward-depth <level>", "depth of forward dependency", "3")
-  .option("--inverse-depth <level>", "depth of inverse dependency", "3")
+  .option("-i, --case-insensitive", "use case insensitive mode for -q and -e", false)
   .option("-c, --cluster", "visualize cluster", false)
-  .option("-F, --no-filter", "disable filter", false)
-  .action((projectName, options) => {
-    const config = loadConfig(workingDir);
+  .option("--forward-depth <level>", "depth of forward dependencies", "3")
+  .option("--inverse-depth <level>", "depth of inverse dependencies", "3")
+  .option("--analyze", "analyze without cache", false)
+  .action(async (projectName: string, options) => {
+    const workingDir = process.cwd();
     const regexpFlags = options.caseInsensitive ? "i" : "";
-    runGraph(config, {
-      projectName,
-      output: options.output,
-      query: options.query ? new RegExp(options.query, regexpFlags) : undefined,
-      exclude: options.exclude ? new RegExp(options.exclude, regexpFlags) : undefined,
-      forwardDepth: parseInt(options.forwardDepth, 10),
-      inverseDepth: parseInt(options.inverseDepth, 10),
-      cluster: !!options.cluster,
-      filter: !options.noFilter,
-    });
+
+    const tasks = new Listr<any>([
+      loadConfigTask({
+        workingDir,
+        projectName,
+      }),
+      loadTableTask({
+        autoAnalyze: options.analyze,
+      }),
+      applyTableFilterTask(),
+      calculateGraphTask({
+        query: options.query ? new RegExp(options.query, regexpFlags) : undefined,
+        exclude: options.exclude ? new RegExp(options.exclude, regexpFlags) : undefined,
+        forwardDepth: parseInt(options.forwardDepth, 10),
+        inverseDepth: parseInt(options.inverseDepth, 10),
+      }),
+      exportGraphTask({
+        workingDir,
+        output: options.output,
+        cluster: !!options.cluster,
+      }),
+    ]);
+
+    try {
+      await tasks.run();
+    } catch (e) {
+      process.exit(1);
+    }
   });
 
 program.parse();

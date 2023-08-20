@@ -12,7 +12,7 @@ export type ProjectName = z.infer<typeof ProjectName>;
 const Project = z.object({
   $name: ProjectName.default("_"),
   files: z.array(z.string().nonempty()).nonempty(),
-  includePatterns: z.array(z.string().nonempty()).optional(),
+  includePatterns: z.array(z.string().nonempty()).nonempty(),
   unifyRules: z.array(z.tuple([z.string().nonempty(), z.string()])).optional(),
 });
 export type Project = z.infer<typeof Project>;
@@ -31,35 +31,20 @@ const Config = z.object({
 });
 export type Config = z.infer<typeof Config>;
 
-export function loadConfig(workingDir: string): Config {
-  const loc = locateConfigFile(workingDir);
-  if (!loc) {
-    console.error("Config file not found");
-    process.exit(1);
-  }
-  const rawData = readFileSync(loc.path, "utf8");
+export function loadConfig(filePath: string): Config {
+  const rawData = readFileSync(filePath, "utf8");
   const config = Config.parse(yaml.load(rawData));
-  config.$configDir = loc.dir;
+  config.$configDir = path.dirname(filePath);
   return config;
 }
 
-function locateConfigFile(baseDir: string) {
+export function locateConfigFile(baseDir: string) {
   while (baseDir && baseDir !== "/") {
-    const configFilePath = path.resolve(baseDir, CONFIG_FILE_NAME);
-    if (existsSync(configFilePath)) {
-      return { dir: baseDir, path: configFilePath };
+    const filePath = path.resolve(baseDir, CONFIG_FILE_NAME);
+    if (existsSync(filePath)) {
+      return filePath;
     }
     baseDir = path.dirname(baseDir);
   }
   return null;
-}
-
-export function fetchProject(config: Config, projectName: ProjectName): Project {
-  const project = config.projects.get(projectName);
-  if (!project) {
-    console.error(`Could not find project '${projectName}' in the config.`);
-    console.error("Valid project names are", config.projects.keys());
-    process.exit(1);
-  }
-  return project;
 }

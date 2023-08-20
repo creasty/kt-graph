@@ -7,10 +7,10 @@ import yaml from "js-yaml";
 import { z } from "zod";
 import { Config, ProjectName } from "config";
 
-const CACHED_TABLE_VERSION = 1;
+const TABLE_VERSION = 1;
 
 const CachedTable = z.object({
-  version: z.number().int().positive().lte(CACHED_TABLE_VERSION),
+  version: z.number().int().positive().lte(TABLE_VERSION),
   createdAt: z.string().datetime({ offset: true }),
   data: z.record(z.string(), z.array(z.string())),
 });
@@ -18,7 +18,7 @@ type CachedTable = z.infer<typeof CachedTable>;
 
 export function saveTable(config: Config, projectName: ProjectName, table: DependencyTable) {
   const cachedTable: CachedTable = {
-    version: CACHED_TABLE_VERSION,
+    version: TABLE_VERSION,
     createdAt: new Date().toISOString(),
     data: {},
   };
@@ -34,11 +34,11 @@ export function saveTable(config: Config, projectName: ProjectName, table: Depen
 }
 
 export function loadTable(config: Config, projectName: ProjectName) {
-  const file = getPathForProject(config, projectName);
-  if (!existsSync(file)) {
+  const filePath = getPathForProject(config, projectName);
+  if (!existsSync(filePath)) {
     return null;
   }
-  const data = readFileSync(file, "utf8");
+  const data = readFileSync(filePath, "utf8");
   const cachedTable = CachedTable.parse(yaml.load(data));
 
   const tableData = new Map<string, Set<string>>();
@@ -47,6 +47,7 @@ export function loadTable(config: Config, projectName: ProjectName) {
   }
 
   return {
+    filePath,
     version: cachedTable.version,
     createdAt: cachedTable.createdAt,
     table: new DependencyTable(tableData),
