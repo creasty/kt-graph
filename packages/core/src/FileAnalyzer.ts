@@ -166,7 +166,7 @@ export class FileAnalyzer {
   #parseUserType(node: Parser.SyntaxNode): string[] {
     const result: string[][] = [];
 
-    // Decompose type parameters
+    // Break down generics
     const walk = (cursor: Parser.TreeCursor) => {
       for (;;) {
         switch (cursor.nodeType) {
@@ -180,7 +180,7 @@ export class FileAnalyzer {
           }
         }
 
-        // go to next node
+        // Go to next node
         if (cursor.gotoFirstChild()) {
           walk(cursor);
           cursor.gotoParent();
@@ -251,7 +251,7 @@ export class FileAnalyzer {
         const matchingName = components.slice(0, pos).join(".");
         const remaining = components.slice(pos);
 
-        // Local types
+        // Scope local types
         if (pos === 1) {
           const dependent = resolveRefDependents(ref);
           for (const decl of dependent.all) {
@@ -281,7 +281,7 @@ export class FileAnalyzer {
         }
       }
 
-      // Fallback - package local
+      // Ambiguous - Package local, type variables, etc.
       return buildAmbiguousRef(this.#packageName, ref.name);
     });
 
@@ -292,7 +292,7 @@ export class FileAnalyzer {
       this.#table.addDeclaration(declIdent);
     }
 
-    // Create canonical ref map to eliminate private aliases
+    // Build a canonical ref map to eliminate private aliases
     const canonicalRefIdentMap = new Map<string, string>();
     for (const [decl, ref] of this.#aliases) {
       if (!decl.isPrivate) continue;
