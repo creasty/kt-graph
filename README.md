@@ -6,7 +6,7 @@ Analyze & visualize class/type dependency of Kotlin codebase.
 |---|---|
 | ![](./example/exposed_full.svg) | ![](./example/exposed_queried.svg) |
 
-<sup>Check [Example in action](#example-in-action) and try it yourself.</sup>
+<sup>Check out [Example in action](#example-in-action) and try it for yourself.</sup>
 
 ## Use as a library
 
@@ -19,7 +19,7 @@ npm i @kt-graph/core
 ```sh
 pnpm i -g @kt-graph/cli
 ```
-<sup>Wondering why not **npm**? - Check [Known issues](#known-issues) below for details.</sup>
+<sup>Wondering why not **npm**? - Read [Known issues](#known-issues) for more details.</sup>
 
 ```sh-session
 $ kt-graph -h
@@ -65,7 +65,16 @@ Options:
 
 Create a `kt-graph.yml` at the root of your project.
 
-JSON Schema: https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json
+JSON/YAML Schema is available [here](https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json).
+
+```yml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json
+version: 1
+
+projects:
+  all:
+    # start here
+```
 
 ## Example in action
 
