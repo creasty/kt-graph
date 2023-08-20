@@ -8,16 +8,22 @@
       "required": ["version", "projects"],
       "properties": {
         "version": {
+          "description": "Version of the configuration file",
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 1
         },
         "projects": {
+          "description": "Projects",
           "type": "object",
-          "propertyNames": true,
           "patternProperties": {
-            "/^[a-zA-Z0-9_-]+$/": {
+            "^[a-zA-Z0-9_-]+$": {
               "$ref": "#/definitions/Project"
             }
+          },
+          "propertyNames": {
+            "description": "Project name",
+            "pattern": "^[a-zA-Z0-9_-]+$"
           }
         }
       }
@@ -30,49 +36,59 @@
         "files": {
           "description": "List of files to process",
           "type": "array",
+          "minLength": 1,
           "items": {
-            "$ref": "#/definitions/FileGlob"
+            "description": "File glob pattern",
+            "type": "string",
+            "minLength": 1
           }
         },
         "includePatterns": {
-          "description": "List of identifier patterns to include in the output",
+          "description": "List of identifier patterns to include in the output.\nRead more at https://github.com/creasty/kt-graph/blob/master/packages/core/src/filters.test.ts",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/TypeNamePattern"
-          }
+            "description": "Glob-like syntax for Kotlin type names",
+            "type": "string",
+            "minLength": 1
+          },
+          "examples": [
+            "alpha[01].charlie",
+            "alpha?.charlie",
+            "alpha.bravo.*.delta.**",
+            "**.echo.*Foo",
+            "**.echo.{foxtrot,golf}.**",
+            "alpha.{bravo,*charlie}.delta",
+            "**.*Foo"
+          ]
         },
         "unifyRules": {
           "description": "List of rules to unify identifiers",
           "type": "array",
-          "items": [
-            {
-              "$ref": "#/definitions/UnifyRuleMatcher"
-            },
-            {
-              "$ref": "#/definitions/UnifyRuleReplacement"
-            }
-          ]
+          "items": {
+            "$ref": "#/definitions/UnifyRule"
+          }
         }
       }
     },
-    "FileGlob": {
-      "description": "File glob pattern",
-      "type": "string",
-      "minLength": 1
-    },
-    "TypeNamePattern": {
-      "description": "Glob-like syntax for Kotlin type names",
-      "type": "string",
-      "minLength": 1
-    },
-    "UnifyRuleMatcher": {
-      "description": "Regular expression for type names",
-      "type": "string",
-      "minLength": 1
-    },
-    "UnifyRuleReplacement": {
-      "description": "Replacement string for type names",
-      "type": "string"
+    "UnifyRule": {
+      "description": "Rule to unify identifiers",
+      "type": "array",
+      "items": [
+        {
+          "description": "Regular expression for type names",
+          "examples": ["\\.Companion(\\.|$)", "(exposed\\.sql\\.Op)\\.\\w+"],
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "description": "Replacement string for type names",
+          "type": "string"
+        }
+      ],
+      "examples": [
+        ["\\.Companion(\\.|$)", ""],
+        ["(exposed\\.sql\\.Op)\\.\\w+", "$1"]
+      ]
     }
   }
 }

@@ -65,8 +65,7 @@ Options:
 
 Create a `kt-graph.yml` at the root of your project.
 
-Schema:
-https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json
+JSON Schema: https://raw.githubusercontent.com/creasty/kt-graph/master/config-schema.json
 
 ## Example in action
 
