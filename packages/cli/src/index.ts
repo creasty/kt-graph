@@ -11,7 +11,7 @@ import Enquirer from "enquirer";
 
 const program = new Command();
 
-program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.4");
+program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.5");
 
 program
   .command("analyze")

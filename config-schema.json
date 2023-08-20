@@ -67,6 +67,14 @@
           "items": {
             "$ref": "#/definitions/UnifyRule"
           }
+        },
+        "highlights": {
+          "description": "List of highlights",
+          "type": "array",
+          "items": {
+            "description": "Regular expression for type names",
+            "type": "string"
+          }
         }
       }
     },

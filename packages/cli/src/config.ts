@@ -14,6 +14,7 @@ const Project = z.object({
   files: z.array(z.string().nonempty()).nonempty(),
   typeNames: z.array(z.string().nonempty()).nonempty(),
   unifyRules: z.array(z.tuple([z.string().nonempty(), z.string()])).optional(),
+  highlights: z.array(z.string().nonempty()).optional(),
 });
 export type Project = z.infer<typeof Project>;
 

@@ -3,9 +3,11 @@ import { ListrTask, ListrDefaultRenderer } from "listr2";
 import graphviz from "graphviz";
 import path from "path";
 import { writeFileSync } from "fs";
+import { Project } from "config";
 
 export type ExportGraphTaskContext = Partial<{
   // Input
+  project: Project;
   graph: DependencyGraph;
 }>;
 
@@ -16,9 +18,14 @@ export function exportGraphTask(params: {
 }): ListrTask<ExportGraphTaskContext, ListrDefaultRenderer> {
   return {
     title: "Exporting graph",
-    enabled: (ctx) => Boolean(ctx.graph),
+    enabled: (ctx) => Boolean(ctx.project && ctx.graph),
     task: async (ctx, task) => {
-      const g = makeGraphviz(ctx.graph!, { cluster: params.cluster });
+      const highlighter = createHighlighter(ctx.project!.highlights);
+
+      const g = makeGraphviz(ctx.graph!, {
+        highlighter,
+        cluster: params.cluster,
+      });
 
       const outputPath = path.resolve(params.workingDir, params.output);
       const format = path.extname(outputPath).slice(1);
@@ -43,6 +50,7 @@ export function exportGraphTask(params: {
 function makeGraphviz(
   graph: DependencyGraph,
   params: {
+    highlighter: (ident: string) => string | null;
     cluster: boolean;
   }
 ) {
@@ -62,9 +70,10 @@ function makeGraphviz(
   g.setNodeAttribut("fontname", "Helvetica-Narrow");
 
   for (const node of graph.nodes()) {
+    const highlightColor = params.highlighter(node.id);
     g.addNode(node.id, {
       fontname: node.matching ? "Helvetica-Narrow-Bold" : undefined,
-      fillcolor: node.matching ? "0,0,0,.12" : undefined,
+      fillcolor: highlightColor ? highlightColor : node.matching ? "0,0,0,.12" : undefined,
       label: formatIdentLabel(node.id),
     });
   }
@@ -80,4 +89,20 @@ function formatIdentLabel(ident: string) {
     /^((?:[a-z][a-zA-Z0-9]*\.)+)((?:[A-Z][a-zA-Z0-9]*)(?:\.[A-Z][a-zA-Z0-9]*)*)$/,
     `!<font point-size="12">$1</font><br/>$2`
   );
+}
+
+function createHighlighter(highlights?: string[]) {
+  const rules = highlights?.map((pattern, i) => {
+    return {
+      regexp: new RegExp(pattern),
+      color: selectRandomColor(i),
+    };
+  });
+
+  return (ident: string) => rules?.find((rule) => rule.regexp.test(ident))?.color ?? null;
+}
+
+function selectRandomColor(n: number) {
+  const hue = ((n * 137.508) % 356) / 365; // use golden angle approximation
+  return `${hue},.5,.8`;
 }
