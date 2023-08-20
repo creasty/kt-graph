@@ -72,7 +72,7 @@
           "description": "List of highlights",
           "type": "array",
           "items": {
-            "description": "Regular expression for type names",
+            "description": "Regular expression for type names.\nUse `/.../i` for case-insensitive matching",
             "type": "string"
           }
         }
@@ -83,7 +83,7 @@
       "type": "array",
       "items": [
         {
-          "description": "Regular expression for type names",
+          "description": "Regular expression for type names.\nUse `/.../i` for case-insensitive matching",
           "examples": ["\\.Companion(\\.|$)", "(exposed\\.sql\\.Op)\\.\\w+"],
           "type": "string",
           "minLength": 1

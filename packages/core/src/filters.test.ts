@@ -1,4 +1,4 @@
-import { convertIdentPatternToRegexp } from "./filters";
+import { convertIdentPatternToRegexp, parseRegExp } from "./filters";
 
 describe("convertIdentPatternToRegexp", () => {
   type Case = {
@@ -10,7 +10,7 @@ describe("convertIdentPatternToRegexp", () => {
     describe(title, () => {
       it.each(cases.map((c) => [c.pattern, c]))("%s", (pattern, c: Case) => {
         const regexp = convertIdentPatternToRegexp(pattern);
-        expect(regexp.source).toMatchSnapshot();
+        expect(regexp).toMatchSnapshot();
         expect(c.good.filter((value) => !regexp.test(value))).toHaveLength(0);
         expect(c.bad.filter((value) => regexp.test(value))).toHaveLength(0);
       });
@@ -41,20 +41,6 @@ describe("convertIdentPatternToRegexp", () => {
       bad: ["alphabravo", "alpha.bravo", "alphaxxxbravo"],
     },
   ]);
-  autoMakeCases("* (not bounded) -- Zero or more alpha-num", [
-    {
-      pattern: "alpha*bravo",
-      good: ["alphabravo", "alphaxbravo", "alphaxxxbravo"],
-      bad: ["alpha.bravo"],
-    },
-  ]);
-  autoMakeCases("** (not bounded) -- Zero or more alpha-num", [
-    {
-      pattern: "alpha**bravo",
-      good: ["alphabravo", "alphaxbravo", "alphaxxxbravo"],
-      bad: ["alpha.bravo"],
-    },
-  ]);
   autoMakeCases("? (half bounded) -- Any one alpha-num", [
     {
       pattern: "?bravo.charlie",
@@ -75,6 +61,30 @@ describe("convertIdentPatternToRegexp", () => {
       pattern: "alpha.bravo?",
       good: ["alpha.bravox"],
       bad: ["alpha.bravo", "alpha.bravoxxx", "alpha.bravo.charlie"],
+    },
+  ]);
+  autoMakeCases("? (bounded) -- Any one alpha-num", [
+    {
+      pattern: "?.bravo.charlie",
+      good: ["x.bravo.charlie"],
+      bad: ["bravo.charlie", "alpha.bravo.charlie"],
+    },
+    {
+      pattern: "alpha.?.charlie",
+      good: ["alpha.x.charlie"],
+      bad: ["alpha.charlie", "alpha.bravo.charlie"],
+    },
+    {
+      pattern: "alpha.bravo.?",
+      good: ["alpha.bravo.x"],
+      bad: ["alpha.bravo", "alpha.bravo.charlie"],
+    },
+  ]);
+  autoMakeCases("* (not bounded) -- Zero or more alpha-num", [
+    {
+      pattern: "alpha*bravo",
+      good: ["alphabravo", "alphaxbravo", "alphaxxxbravo"],
+      bad: ["alpha.bravo"],
     },
   ]);
   autoMakeCases("* (half bounded) -- Zero or more alpha-num", [
@@ -99,6 +109,30 @@ describe("convertIdentPatternToRegexp", () => {
       bad: ["alpha.bravo.charlie"],
     },
   ]);
+  autoMakeCases("* (bounded) -- Zero or one component", [
+    {
+      pattern: "*.bravo.charlie",
+      good: ["bravo.charlie", "alpha.bravo.charlie"],
+      bad: ["xxx.yyy.bravo.charlie"],
+    },
+    {
+      pattern: "alpha.*.charlie",
+      good: ["alpha.charlie", "alpha.bravo.charlie"],
+      bad: ["alpha.xxx.yyy.charlie"],
+    },
+    {
+      pattern: "alpha.bravo.*",
+      good: ["alpha.bravo", "alpha.bravo.charlie"],
+      bad: ["alpha.bravo.xxx.yyy"],
+    },
+  ]);
+  autoMakeCases("** (not bounded) -- Zero or more alpha-num", [
+    {
+      pattern: "alpha**bravo",
+      good: ["alphabravo", "alphaxbravo", "alphaxxxbravo"],
+      bad: ["alpha.bravo"],
+    },
+  ]);
   autoMakeCases("** (half bounded) -- Zero or more alpha-num", [
     {
       pattern: "**bravo.charlie",
@@ -119,40 +153,6 @@ describe("convertIdentPatternToRegexp", () => {
       pattern: "alpha.bravo**",
       good: ["alpha.bravo", "alpha.bravoxxx"],
       bad: ["alpha.bravo.charlie"],
-    },
-  ]);
-  autoMakeCases("? (bounded) -- Any one alpha-num", [
-    {
-      pattern: "?.bravo.charlie",
-      good: ["x.bravo.charlie"],
-      bad: ["bravo.charlie", "alpha.bravo.charlie"],
-    },
-    {
-      pattern: "alpha.?.charlie",
-      good: ["alpha.x.charlie"],
-      bad: ["alpha.charlie", "alpha.bravo.charlie"],
-    },
-    {
-      pattern: "alpha.bravo.?",
-      good: ["alpha.bravo.x"],
-      bad: ["alpha.bravo", "alpha.bravo.charlie"],
-    },
-  ]);
-  autoMakeCases("* (bounded) -- Zero or one component", [
-    {
-      pattern: "*.bravo.charlie",
-      good: ["bravo.charlie", "alpha.bravo.charlie"],
-      bad: ["xxx.yyy.bravo.charlie"],
-    },
-    {
-      pattern: "alpha.*.charlie",
-      good: ["alpha.charlie", "alpha.bravo.charlie"],
-      bad: ["alpha.xxx.yyy.charlie"],
-    },
-    {
-      pattern: "alpha.bravo.*",
-      good: ["alpha.bravo", "alpha.bravo.charlie"],
-      bad: ["alpha.bravo.xxx.yyy"],
     },
   ]);
   autoMakeCases("** (bounded) -- Zero or more components", [
@@ -269,7 +269,7 @@ describe("convertIdentPatternToRegexp", () => {
       bad: ["alpha.bravo", "alpha.bravo0", "alpha.bravo.9"],
     },
   ]);
-  autoMakeCases("Complex", [
+  autoMakeCases("Complex examples", [
     {
       pattern: "alpha.bravo.*.delta.**",
       good: ["alpha.bravo.charlie.delta", "alpha.bravo.charlie.delta.echo", "alpha.bravo.charlie.delta.echo.foxtrot"],
@@ -301,4 +301,11 @@ describe("convertIdentPatternToRegexp", () => {
       bad: ["foo", "xxxfoo", "fooxxx"],
     },
   ]);
+});
+
+describe("parseRegExp", () => {
+  it.each(["alpha", "/alpha", "/alpha/", "/alpha/i", "/alpha/bravo/", "/alpha/bravo/i"])("%s", (pattern) => {
+    const regexp = parseRegExp(pattern);
+    expect(regexp).toMatchSnapshot();
+  });
 });

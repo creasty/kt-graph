@@ -8,6 +8,7 @@ import { applyTableFilterTask } from "tasks/applyTableFiltersTask";
 import { calculateGraphTask } from "tasks/calculateGraphTask";
 import { exportGraphTask } from "tasks/exportGraphTask";
 import Enquirer from "enquirer";
+import { parseRegExp } from "@kt-graph/core";
 
 const program = new Command();
 
@@ -50,14 +51,12 @@ program
   .option("-o, --output <file>", "output file path", "graph.pdf")
   .option("-q, --query <regexp>", "query string")
   .option("-e, --exclude <regexp>", "exclude query string")
-  .option("-i, --case-insensitive", "use case insensitive mode for -q and -e", false)
   .option("-c, --cluster", "visualize cluster", false)
   .option("--forward-depth <level>", "depth of forward dependencies", "3")
   .option("--inverse-depth <level>", "depth of inverse dependencies", "3")
   .option("--analyze", "analyze without cache", false)
   .action(async (projectName: string, options) => {
     const workingDir = process.cwd();
-    const regexpFlags = options.caseInsensitive ? "i" : "";
 
     const tasks = new Listr<any>(
       [
@@ -70,8 +69,8 @@ program
         }),
         applyTableFilterTask(),
         calculateGraphTask({
-          query: options.query ? new RegExp(options.query, regexpFlags) : undefined,
-          exclude: options.exclude ? new RegExp(options.exclude, regexpFlags) : undefined,
+          query: options.query ? parseRegExp(options.query) : undefined,
+          exclude: options.exclude ? parseRegExp(options.exclude) : undefined,
           forwardDepth: parseInt(options.forwardDepth, 10),
           inverseDepth: parseInt(options.inverseDepth, 10),
         }),

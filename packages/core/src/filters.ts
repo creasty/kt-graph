@@ -20,7 +20,7 @@ export function createUnifyFilter(unifyRules: [string, string][]): DependencyTab
   if (!unifyRules.length) return;
 
   const substitutions = unifyRules.map(([pattern, replacement]) => {
-    return { regexp: new RegExp(pattern), replacement };
+    return { regexp: parseRegExp(pattern), replacement };
   });
 
   return (ident: string) => {
@@ -30,6 +30,14 @@ export function createUnifyFilter(unifyRules: [string, string][]): DependencyTab
     }
     return result;
   };
+}
+
+export function parseRegExp(str: string): RegExp {
+  const match = str.match(/^([/])(.+?)\1([i])?$/);
+  if (match) {
+    return new RegExp(match[2], match[3]);
+  }
+  return new RegExp(str);
 }
 
 export function convertIdentPatternToRegexp(str: string): RegExp {

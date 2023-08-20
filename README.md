@@ -53,7 +53,6 @@ Options:
   -o, --output <file>      output file path (default: "graph.pdf")
   -q, --query <regexp>     query string
   -e, --exclude <regexp>   exclude query string
-  -i, --case-insensitive   use case insensitive mode for -q and -e (default: false)
   -c, --cluster            visualize cluster (default: false)
   --forward-depth <level>  depth of forward dependencies (default: "3")
   --inverse-depth <level>  depth of inverse dependencies (default: "3")
@@ -131,7 +130,7 @@ $ kt-graph graph all -o full.svg -c
 ✔ Exporting graph
   › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/full.svg'
 
-$ kt-graph graph all -o math.svg -c -q 'math' -i
+$ kt-graph graph all -o math.svg -c -q '/math/i'
 ✔ Load config
 ✔ Loading dependency table
   › Cache found: 2023-08-20T05:09:35.377Z

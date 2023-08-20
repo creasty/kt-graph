@@ -1,4 +1,4 @@
-import { DependencyGraph } from "@kt-graph/core";
+import { DependencyGraph, parseRegExp } from "@kt-graph/core";
 import { ListrTask, ListrDefaultRenderer } from "listr2";
 import graphviz from "graphviz";
 import path from "path";
@@ -94,7 +94,7 @@ function formatIdentLabel(ident: string) {
 function createHighlighter(highlights?: string[]) {
   const rules = highlights?.map((pattern, i) => {
     return {
-      regexp: new RegExp(pattern),
+      regexp: parseRegExp(pattern),
       color: selectRandomColor(i),
     };
   });

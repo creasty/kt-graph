@@ -1,101 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component *.bravo.charlie 1`] = `"^((\\.|\\b)(\\w+(\\.|\\b))?)?bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component *.bravo.charlie 1`] = `/\\^\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\?\\)\\?bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component alpha.*.charlie 1`] = `"^alpha((\\.|\\b)(\\w+(\\.|\\b))?)?charlie$"`;
+exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component alpha.*.charlie 1`] = `/\\^alpha\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\?\\)\\?charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component alpha.bravo.* 1`] = `"^alpha\\.bravo((\\.|\\b)(\\w+(\\.|\\b))?)?$"`;
+exports[`convertIdentPatternToRegexp * (bounded) -- Zero or one component alpha.bravo.* 1`] = `/\\^alpha\\\\\\.bravo\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\?\\)\\?\\$/`;
 
-exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num *bravo.charlie 1`] = `"^(\\w*)bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num *bravo.charlie 1`] = `/\\^\\(\\\\w\\*\\)bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha*.charlie 1`] = `"^alpha(\\w*)\\.charlie$"`;
+exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha*.charlie 1`] = `/\\^alpha\\(\\\\w\\*\\)\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha.*charlie 1`] = `"^alpha\\.(\\w*)charlie$"`;
+exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha.*charlie 1`] = `/\\^alpha\\\\\\.\\(\\\\w\\*\\)charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha.bravo* 1`] = `"^alpha\\.bravo(\\w*)$"`;
+exports[`convertIdentPatternToRegexp * (half bounded) -- Zero or more alpha-num alpha.bravo* 1`] = `/\\^alpha\\\\\\.bravo\\(\\\\w\\*\\)\\$/`;
 
-exports[`convertIdentPatternToRegexp * (not bounded) -- Zero or more alpha-num alpha*bravo 1`] = `"^alpha(\\w*)bravo$"`;
+exports[`convertIdentPatternToRegexp * (not bounded) -- Zero or more alpha-num alpha*bravo 1`] = `/\\^alpha\\(\\\\w\\*\\)bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components **.bravo.charlie 1`] = `"^((\\.|\\b)(\\w+(\\.|\\b))*)?bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components **.bravo.charlie 1`] = `/\\^\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components alpha.**.charlie 1`] = `"^alpha((\\.|\\b)(\\w+(\\.|\\b))*)?charlie$"`;
+exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components alpha.**.charlie 1`] = `/\\^alpha\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components alpha.bravo.** 1`] = `"^alpha\\.bravo((\\.|\\b)(\\w+(\\.|\\b))*)?$"`;
+exports[`convertIdentPatternToRegexp ** (bounded) -- Zero or more components alpha.bravo.** 1`] = `/\\^alpha\\\\\\.bravo\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num **bravo.charlie 1`] = `"^(\\w*)bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num **bravo.charlie 1`] = `/\\^\\(\\\\w\\*\\)bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha**.charlie 1`] = `"^alpha(\\w*)\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha**.charlie 1`] = `/\\^alpha\\(\\\\w\\*\\)\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha.**charlie 1`] = `"^alpha\\.(\\w*)charlie$"`;
+exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha.**charlie 1`] = `/\\^alpha\\\\\\.\\(\\\\w\\*\\)charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha.bravo** 1`] = `"^alpha\\.bravo(\\w*)$"`;
+exports[`convertIdentPatternToRegexp ** (half bounded) -- Zero or more alpha-num alpha.bravo** 1`] = `/\\^alpha\\\\\\.bravo\\(\\\\w\\*\\)\\$/`;
 
-exports[`convertIdentPatternToRegexp ** (not bounded) -- Zero or more alpha-num alpha**bravo 1`] = `"^alpha(\\w*)bravo$"`;
+exports[`convertIdentPatternToRegexp ** (not bounded) -- Zero or more alpha-num alpha**bravo 1`] = `/\\^alpha\\(\\\\w\\*\\)bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num ?.bravo.charlie 1`] = `"^\\w\\.bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num ?.bravo.charlie 1`] = `/\\^\\\\w\\\\\\.bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num alpha.?.charlie 1`] = `"^alpha\\.\\w\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num alpha.?.charlie 1`] = `/\\^alpha\\\\\\.\\\\w\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num alpha.bravo.? 1`] = `"^alpha\\.bravo\\.\\w$"`;
+exports[`convertIdentPatternToRegexp ? (bounded) -- Any one alpha-num alpha.bravo.? 1`] = `/\\^alpha\\\\\\.bravo\\\\\\.\\\\w\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num ?bravo.charlie 1`] = `"^\\wbravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num ?bravo.charlie 1`] = `/\\^\\\\wbravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha.?charlie 1`] = `"^alpha\\.\\wcharlie$"`;
+exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha.?charlie 1`] = `/\\^alpha\\\\\\.\\\\wcharlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha.bravo? 1`] = `"^alpha\\.bravo\\w$"`;
+exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha.bravo? 1`] = `/\\^alpha\\\\\\.bravo\\\\w\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha?.charlie 1`] = `"^alpha\\w\\.charlie$"`;
+exports[`convertIdentPatternToRegexp ? (half bounded) -- Any one alpha-num alpha?.charlie 1`] = `/\\^alpha\\\\w\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp ? (not bounded) -- Any one alpha-num alpha?bravo 1`] = `"^alpha\\wbravo$"`;
+exports[`convertIdentPatternToRegexp ? (not bounded) -- Any one alpha-num alpha?bravo 1`] = `/\\^alpha\\\\wbravo\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (bounded) -- Charset [01].bravo.charlie 1`] = `"^[01]\\.bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp [] (bounded) -- Charset [01].bravo.charlie 1`] = `/\\^\\[01\\]\\\\\\.bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (bounded) -- Charset alpha.[01].charlie 1`] = `"^alpha\\.[01]\\.charlie$"`;
+exports[`convertIdentPatternToRegexp [] (bounded) -- Charset alpha.[01].charlie 1`] = `/\\^alpha\\\\\\.\\[01\\]\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (bounded) -- Charset alpha.bravo.[01] 1`] = `"^alpha\\.bravo\\.[01]$"`;
+exports[`convertIdentPatternToRegexp [] (bounded) -- Charset alpha.bravo.[01] 1`] = `/\\^alpha\\\\\\.bravo\\\\\\.\\[01\\]\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset [01]bravo.charlie 1`] = `"^[01]bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset [01]bravo.charlie 1`] = `/\\^\\[01\\]bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha.[01]charlie 1`] = `"^alpha\\.[01]charlie$"`;
+exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha.[01]charlie 1`] = `/\\^alpha\\\\\\.\\[01\\]charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha.bravo[01] 1`] = `"^alpha\\.bravo[01]$"`;
+exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha.bravo[01] 1`] = `/\\^alpha\\\\\\.bravo\\[01\\]\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha[01].charlie 1`] = `"^alpha[01]\\.charlie$"`;
+exports[`convertIdentPatternToRegexp [] (half bounded) -- Charset alpha[01].charlie 1`] = `/\\^alpha\\[01\\]\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (not bounded) -- Charset alpha[0-5]bravo 1`] = `"^alpha[0-5]bravo$"`;
+exports[`convertIdentPatternToRegexp [] (not bounded) -- Charset alpha[0-5]bravo 1`] = `/\\^alpha\\[0-5\\]bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp [] (not bounded) -- Charset alpha[05]bravo 1`] = `"^alpha[05]bravo$"`;
+exports[`convertIdentPatternToRegexp [] (not bounded) -- Charset alpha[05]bravo 1`] = `/\\^alpha\\[05\\]bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (bounded) -- Choices {alpha,xxx,yyy}.bravo.charlie 1`] = `"^(alpha|xxx|yyy)\\.bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp {} (bounded) -- Choices {alpha,xxx,yyy}.bravo.charlie 1`] = `/\\^\\(alpha\\|xxx\\|yyy\\)\\\\\\.bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (bounded) -- Choices alpha.{bravo,xxx,yyy}.charlie 1`] = `"^alpha\\.(bravo|xxx|yyy)\\.charlie$"`;
+exports[`convertIdentPatternToRegexp {} (bounded) -- Choices alpha.{bravo,xxx,yyy}.charlie 1`] = `/\\^alpha\\\\\\.\\(bravo\\|xxx\\|yyy\\)\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (bounded) -- Choices alpha.bravo.{charlie,xxx,yyy} 1`] = `"^alpha\\.bravo\\.(charlie|xxx|yyy)$"`;
+exports[`convertIdentPatternToRegexp {} (bounded) -- Choices alpha.bravo.{charlie,xxx,yyy} 1`] = `/\\^alpha\\\\\\.bravo\\\\\\.\\(charlie\\|xxx\\|yyy\\)\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices {alpha,xxx,yyy}bravo.charlie 1`] = `"^(alpha|xxx|yyy)bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices {alpha,xxx,yyy}bravo.charlie 1`] = `/\\^\\(alpha\\|xxx\\|yyy\\)bravo\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha.{bravo,xxx,yyy}charlie 1`] = `"^alpha\\.(bravo|xxx|yyy)charlie$"`;
+exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha.{bravo,xxx,yyy}charlie 1`] = `/\\^alpha\\\\\\.\\(bravo\\|xxx\\|yyy\\)charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha.bravo{charlie,xxx,yyy} 1`] = `"^alpha\\.bravo(charlie|xxx|yyy)$"`;
+exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha.bravo{charlie,xxx,yyy} 1`] = `/\\^alpha\\\\\\.bravo\\(charlie\\|xxx\\|yyy\\)\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha{bravo,xxx,yyy}.charlie 1`] = `"^alpha(bravo|xxx|yyy)\\.charlie$"`;
+exports[`convertIdentPatternToRegexp {} (half bounded) -- Choices alpha{bravo,xxx,yyy}.charlie 1`] = `/\\^alpha\\(bravo\\|xxx\\|yyy\\)\\\\\\.charlie\\$/`;
 
-exports[`convertIdentPatternToRegexp {} (not bounded) -- Choices alpha{xxx,yyy}bravo 1`] = `"^alpha(xxx|yyy)bravo$"`;
+exports[`convertIdentPatternToRegexp {} (not bounded) -- Choices alpha{xxx,yyy}bravo 1`] = `/\\^alpha\\(xxx\\|yyy\\)bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex **.*Foo 1`] = `"^((\\.|\\b)(\\w+(\\.|\\b))*)?\\.(\\w*)Foo$"`;
+exports[`convertIdentPatternToRegexp Complex examples **.*Foo 1`] = `/\\^\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?\\\\\\.\\(\\\\w\\*\\)Foo\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex **.echo.*Foo 1`] = `"^((\\.|\\b)(\\w+(\\.|\\b))*)?echo\\.(\\w*)Foo$"`;
+exports[`convertIdentPatternToRegexp Complex examples **.echo.*Foo 1`] = `/\\^\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?echo\\\\\\.\\(\\\\w\\*\\)Foo\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex **.echo.{foxtrot,golf}.** 1`] = `"^((\\.|\\b)(\\w+(\\.|\\b))*)?echo\\.(foxtrot|golf)((\\.|\\b)(\\w+(\\.|\\b))*)?$"`;
+exports[`convertIdentPatternToRegexp Complex examples **.echo.{foxtrot,golf}.** 1`] = `/\\^\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?echo\\\\\\.\\(foxtrot\\|golf\\)\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex alpha.{bravo,*charlie}.delta 1`] = `"^alpha\\.(bravo|(\\w*)charlie)\\.delta$"`;
+exports[`convertIdentPatternToRegexp Complex examples alpha.{bravo,*charlie}.delta 1`] = `/\\^alpha\\\\\\.\\(bravo\\|\\(\\\\w\\*\\)charlie\\)\\\\\\.delta\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex alpha.bravo.*.delta.** 1`] = `"^alpha\\.bravo((\\.|\\b)(\\w+(\\.|\\b))?)?delta((\\.|\\b)(\\w+(\\.|\\b))*)?$"`;
+exports[`convertIdentPatternToRegexp Complex examples alpha.bravo.*.delta.** 1`] = `/\\^alpha\\\\\\.bravo\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\?\\)\\?delta\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?\\$/`;
 
-exports[`convertIdentPatternToRegexp Complex foo*.** 1`] = `"^foo(\\w*)\\.((\\.|\\b)(\\w+(\\.|\\b))*)?$"`;
+exports[`convertIdentPatternToRegexp Complex examples foo*.** 1`] = `/\\^foo\\(\\\\w\\*\\)\\\\\\.\\(\\(\\\\\\.\\|\\\\b\\)\\(\\\\w\\+\\(\\\\\\.\\|\\\\b\\)\\)\\*\\)\\?\\$/`;
 
-exports[`convertIdentPatternToRegexp Plain alpha 1`] = `"^alpha$"`;
+exports[`convertIdentPatternToRegexp Plain alpha 1`] = `/\\^alpha\\$/`;
 
-exports[`convertIdentPatternToRegexp Plain alpha.bravo 1`] = `"^alpha\\.bravo$"`;
+exports[`convertIdentPatternToRegexp Plain alpha.bravo 1`] = `/\\^alpha\\\\\\.bravo\\$/`;
 
-exports[`convertIdentPatternToRegexp Plain alpha.bravo.charlie 1`] = `"^alpha\\.bravo\\.charlie$"`;
+exports[`convertIdentPatternToRegexp Plain alpha.bravo.charlie 1`] = `/\\^alpha\\\\\\.bravo\\\\\\.charlie\\$/`;
+
+exports[`parseRegExp /alpha 1`] = `/\\\\/alpha/`;
+
+exports[`parseRegExp /alpha/ 1`] = `/alpha/`;
+
+exports[`parseRegExp /alpha/bravo/ 1`] = `/alpha\\\\/bravo/`;
+
+exports[`parseRegExp /alpha/bravo/i 1`] = `/alpha\\\\/bravo/i`;
+
+exports[`parseRegExp /alpha/i 1`] = `/alpha/i`;
+
+exports[`parseRegExp alpha 1`] = `/alpha/`;
