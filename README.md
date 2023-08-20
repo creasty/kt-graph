@@ -1,10 +1,27 @@
 # kt-graph
 
-Analyze & visualize class/type dependency of Kotlin codebase.
+Analyze & visualize class/type dependencies within your Kotlin codebase.
 
-| Entire codebase of [Exposed](https://github.com/JetBrains/Exposed) | Queried for 'math' |
+**Key features**
+
+- Fast
+  - Leverage `tree-sitter` for rapid static code analysis.
+  - Benefit from pre-analyzed dependency table caching.
+- Versatile & Customizable
+  - Use glob patterns to filter files and type names.
+  - Search for specific type names with regular expression.
+  - Unify/merge redundant type names for clarity.
+  - Adjust graph depth parameters to meet specific analytical needs.
+
+**Example**
+
+| Comprehensive dependency map of [Exposed](https://github.com/JetBrains/Exposed) | Targeted analysis on 'math' |
 |---|---|
 | ![](./example/exposed_full.svg) | ![](./example/exposed_queried.svg) |
+
+| Custom highlights |
+|---|
+| ![](./example/exposed_hl.svg) |
 
 <sup>Check out [Example in action](#example-in-action) and try it for yourself.</sup>
 
@@ -86,10 +103,13 @@ $ git clone https://github.com/JetBrains/Exposed.git
 $ cd ./Exposed
 ```
 
-2\. Set up the configuration and run kt-graph commands to analyze and visualize:
+2\. Set up the configuration file:
 
 ```sh-session
-$ cat > kt-graph.yml
+$ vim kt-graph.yml
+```
+
+```yml
 version: 1
 
 projects:
@@ -101,9 +121,12 @@ projects:
     typeNames:
       - "org.jetbrains.exposed.**"
     unifyRules:
-      - ["\\.Companion(\\.|$)", ""]
+      - ["\\.Companion\\b", ""]
       - ["(exposed\\.sql\\.Op)\\.\\w+", "$1"]
-^D
+    highlights:
+      - "Op"
+      - "Function"
+      - "Type"
 ```
 
 3\. Analyze kotlin files and build a dependency table.
@@ -118,7 +141,7 @@ $ kt-graph analyze all
 ✔ Saving dependency table
 ```
 
-4\. Create a graph with various options.
+4\. Generate graphs in various ways.
 
 ```sh-session
 $ kt-graph graph all -o full.svg -c
@@ -131,7 +154,9 @@ $ kt-graph graph all -o full.svg -c
     Total edges: 1001
 ✔ Exporting graph
   › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/full.svg'
+```
 
+```sh-session
 $ kt-graph graph all -o math.svg -c -q '/math/i'
 ✔ Load config
 ✔ Loading dependency table
@@ -147,7 +172,7 @@ $ kt-graph graph all -o math.svg -c -q '/math/i'
 
 ## Known issues
 
-- `npm install --location=global` fails with a message `Error: Cannot find module 'nan'` due to [tree-sitter-kotlin](https://github.com/fwcd/tree-sitter-kotlin/blob/06a2f6e71c7fcac34addcbf2a4667adad1b9c5a7/package.json#L8).
-    - I'm a bit stumped as it works straightforwardly with `npm install` (not global) or `pnpm install --global`.
-    - Any insights to help resolve it would be appreciated.
-- `tree-sitter-kotlin` generally works adequately, but it does have some bugs affecting precise parsing, which lead to missing nodes and links in your output graphs.
+- Attempting `npm install --location=global` results in the error: `Cannot find module 'nan'`. This is attributed to dependencies within [tree-sitter-kotlin](https://github.com/fwcd/tree-sitter-kotlin/blob/06a2f6e71c7fcac34addcbf2a4667adad1b9c5a7/package.json#L8).
+  - Curiously, the installation proceeds without issues when using non-global npm install or pnpm.
+  - Contributions and insights towards a resolution are most welcome.
+- On the whole, tree-sitter-kotlin offers commendable accuracy. However, there are challenges and certain bugs might lead to incomplete nodes and links in the generated graph.

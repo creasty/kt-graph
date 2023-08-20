@@ -94,7 +94,7 @@
         }
       ],
       "examples": [
-        ["\\.Companion(\\.|$)", ""],
+        ["\\.Companion\\b", ""],
         ["(exposed\\.sql\\.Op)\\.\\w+", "$1"]
       ]
     }
