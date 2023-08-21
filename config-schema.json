@@ -34,7 +34,7 @@
       "required": ["files", "typeNames"],
       "properties": {
         "files": {
-          "description": "List of files to process",
+          "description": "List of files to analyze",
           "type": "array",
           "minLength": 1,
           "items": {
@@ -44,7 +44,7 @@
           }
         },
         "typeNames": {
-          "description": "List of type names to include in the output.\nRead more at https://github.com/creasty/kt-graph/blob/master/packages/core/src/filters.test.ts",
+          "description": "List of type names to include in the graph.\nRead more at https://github.com/creasty/kt-graph/blob/master/packages/core/src/filters.test.ts",
           "type": "array",
           "items": {
             "description": "Glob-like syntax for Kotlin type names",
@@ -62,28 +62,28 @@
           ]
         },
         "unifyRules": {
-          "description": "List of rules to unify identifiers",
+          "description": "Rules to unify type names in the graph",
           "type": "array",
           "items": {
             "$ref": "#/definitions/UnifyRule"
           }
         },
         "highlights": {
-          "description": "List of highlights",
+          "description": "Highlight type names in the graph",
           "type": "array",
           "items": {
-            "description": "Regular expression for type names.\nUse `/.../i` for case-insensitive matching",
+            "description": "Regular expression for type names.\nUse `/•/i` for case-insensitive matching",
             "type": "string"
           }
         }
       }
     },
     "UnifyRule": {
-      "description": "Rule to unify identifiers",
+      "description": "Rule to unify type names",
       "type": "array",
       "items": [
         {
-          "description": "Regular expression for type names.\nUse `/.../i` for case-insensitive matching",
+          "description": "Regular expression for type names.\nUse `/•/i` for case-insensitive matching",
           "examples": ["\\.Companion(\\.|$)", "(exposed\\.sql\\.Op)\\.\\w+"],
           "type": "string",
           "minLength": 1

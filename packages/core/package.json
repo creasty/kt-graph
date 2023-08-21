@@ -1,7 +1,7 @@
 {
   "name": "@kt-graph/core",
   "version": "0.0.8",
-  "description": "Analyze & visualize class/type dependency of Kotlin codebase",
+  "description": "Analyze & visualize class/type dependencies in Kotlin codebase",
   "homepage": "https://github.com/creasty/kt-graph",
   "repository": {
     "type": "git",

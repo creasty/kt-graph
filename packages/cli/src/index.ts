@@ -12,12 +12,18 @@ import { parseRegExp } from "@kt-graph/core";
 
 const program = new Command();
 
-program.name("kt-graph").description("Analyze & visualize class/type dependency of Kotlin codebase").version("0.0.5");
+program.name("kt-graph").description("Analyze & visualize class/type dependencies in Kotlin codebase");
+
+const VERSION = process.env.KT_GRAPH_VERSION;
+if (VERSION) {
+  program.version(VERSION);
+}
 
 program
   .command("analyze")
-  .description("Analyze and create a dependency table")
-  .argument("<project>", "project name")
+  .alias("a")
+  .description("Analyze files and cache the dependency table")
+  .argument("<project>", "Project name specified in the config file")
   .action(async (projectName: string) => {
     const workingDir = process.cwd();
 
@@ -45,16 +51,39 @@ program
   });
 
 program
-  .command("graph")
-  .description("Create a dependency graph")
-  .argument("<project>", "project name")
-  .option("-o, --output <file>", "output file path", "graph.pdf")
-  .option("-q, --query <regexp>", "query string")
-  .option("-e, --exclude <regexp>", "exclude query string")
-  .option("-c, --cluster", "enable cluster layout", false)
-  .option("--forward-depth <level>", "depth of forward dependencies", "3")
-  .option("--inverse-depth <level>", "depth of inverse dependencies", "3")
-  .option("--update", "run analyze command and update a dependency table", false)
+  .command("generate")
+  .alias("g")
+  .description("Generate a graph from the dependency table")
+  .argument("<project>", "Project name specified in the config file")
+  .option(
+    "-o, --output <file>",
+    `Output file path.\n` +
+      `Change the extension to select a different output format.\n` +
+      `Refer to https://graphviz.org/docs/outputs/ for the list of supported formats.`,
+    "graph.pdf"
+  )
+  .option(
+    "-q, --query <regexp>",
+    `Search query for type names to include in the graph.\n` +
+      `Default behavior is case sensitive. Wrap with '/•/i' to change that.\n` +
+      `Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)`
+  )
+  .option(
+    "-e, --exclude <regexp>",
+    "Search query for type names to exclude from the graph.`+`\nRefer to --query for the syntax."
+  )
+  .option(
+    "--forward-depth <level>",
+    `Depth of graph for forward dependencies.\n` + `Effective when --query/--exclude creates a proper subgraph`,
+    "3"
+  )
+  .option(
+    "--inverse-depth <level>",
+    `Depth of graph for inverse dependencies.\n` + `Refer to --forward-depth for more detail`,
+    "3"
+  )
+  .option("-c, --cluster", "Enable cluster layout", false)
+  .option("--update", "Update the dependency table (Shortcut to run analyze command together)", false)
   .action(async (projectName: string, options) => {
     const workingDir = process.cwd();
 

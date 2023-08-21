@@ -1,6 +1,6 @@
 # kt-graph
 
-Analyze & visualize class/type dependencies within your Kotlin codebase.
+Analyze & visualize class/type dependencies in Kotlin codebase.
 
 **Key features**
 
@@ -11,6 +11,7 @@ Analyze & visualize class/type dependencies within your Kotlin codebase.
   - Use glob patterns to filter files and type names.
   - Search for specific type names with regular expression.
   - Unify/merge redundant type names for clarity.
+  - Highlight specific type names for an enhanced overview.
   - Adjust graph depth parameters to meet specific analytical needs.
 
 **Example**
@@ -48,34 +49,41 @@ You have two primary commands to use:
 
 ```sh-session
 $ kt-graph analyze -h
-Usage: kt-graph analyze [options] <project>
+Usage: kt-graph analyze|a [options] <project>
 
-Analyze and create a dependency table
+Analyze files and cache the dependency table
 
 Arguments:
-  project     project name
+  project     Project name specified in the config file
 
 Options:
   -h, --help  display help for command
 ```
 
 ```sh-session
-$ kt-graph graph -h
-Usage: kt-graph graph [options] <project>
+$ kt-graph generate -h
+Usage: kt-graph generate|g [options] <project>
 
-Create a dependency graph
+Generate a graph from the dependency table
 
 Arguments:
-  project                  project name
+  project                  Project name specified in the config file
 
 Options:
-  -o, --output <file>      output file path (default: "graph.pdf")
-  -q, --query <regexp>     query string
-  -e, --exclude <regexp>   exclude query string
-  -c, --cluster            enable cluster layout (default: false)
-  --forward-depth <level>  depth of forward dependencies (default: "3")
-  --inverse-depth <level>  depth of inverse dependencies (default: "3")
-  --update                 run analyze command and update a dependency table (default: false)
+  -o, --output <file>      Output file path.
+                           Change the extension to select a different output format.
+                           Refer to https://graphviz.org/docs/outputs/ for the list of supported formats. (default: "graph.pdf")
+  -q, --query <regexp>     Search query for type names to include in the graph.
+                           Default behavior is case sensitive. Wrap with '/•/i' to change that.
+                           Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)
+  -e, --exclude <regexp>   Search query for type names to exclude from the graph.`+`
+                           Refer to --query for the syntax.
+  --forward-depth <level>  Depth of graph for forward dependencies.
+                           Effective when --query/--exclude creates a proper subgraph (default: "3")
+  --inverse-depth <level>  Depth of graph for inverse dependencies.
+                           Refer to --forward-depth for more detail (default: "3")
+  -c, --cluster            Enable cluster layout (default: false)
+  --update                 Update the dependency table (Shortcut to run analyze command together) (default: false)
   -h, --help               display help for command
 ```
 
@@ -144,7 +152,7 @@ $ kt-graph analyze all
 4\. Generate graphs in various ways.
 
 ```sh-session
-$ kt-graph graph all -o full.svg -c
+$ kt-graph generate all -o full.svg -c
 ✔ Load config
 ✔ Loading dependency table
   › Cache found: 2023-08-20T05:09:35.377Z
@@ -157,7 +165,7 @@ $ kt-graph graph all -o full.svg -c
 ```
 
 ```sh-session
-$ kt-graph graph all -o math.svg -c -q '/math/i'
+$ kt-graph generate all -o math.svg -c -q '/math/i'
 ✔ Load config
 ✔ Loading dependency table
   › Cache found: 2023-08-20T05:09:35.377Z
@@ -175,4 +183,6 @@ $ kt-graph graph all -o math.svg -c -q '/math/i'
 - Attempting `npm install --location=global` results in the error: `Cannot find module 'nan'`. This is attributed to dependencies within [tree-sitter-kotlin](https://github.com/fwcd/tree-sitter-kotlin/blob/06a2f6e71c7fcac34addcbf2a4667adad1b9c5a7/package.json#L8).
   - Curiously, the installation proceeds without issues when using non-global npm install or pnpm.
   - Contributions and insights towards a resolution are most welcome.
-- On the whole, tree-sitter-kotlin offers commendable accuracy. However, there are challenges and certain bugs might lead to incomplete nodes and links in the generated graph.
+- On the whole, tree-sitter-kotlin offers commendable accuracy. However, occasional bugs in the parser can result in incomplete nodes and links in the generated graph.
+- Wildcard imports are not yet supported. Types from such packages fall under 'unresolvable references' and won't be included in the dependency table.
+- Type variables have limited support. While typically benign, they can sometimes be unresolved or resolved inaccurately.

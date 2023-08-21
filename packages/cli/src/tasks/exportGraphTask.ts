@@ -103,6 +103,6 @@ function createHighlighter(highlights?: string[]) {
 }
 
 function selectRandomColor(n: number) {
-  const hue = ((n * 137.508) % 356) / 365; // use golden angle approximation
-  return `${hue},.5,.8`;
+  const hue = ((n * 137.508) % 360) / 360; // use golden angle approximation
+  return `${hue},.5,.8,.5`;
 }
