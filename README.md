@@ -6,7 +6,7 @@ Analyze & visualize class/type dependencies in Kotlin codebase.
 
 - Fast
   - Leverage `tree-sitter` for rapid static code analysis.
-  - Benefit from pre-analyzed dependency table caching.
+  - Benefit from analyzed dependency table caching.
 - Versatile & Customizable
   - Use glob patterns to filter files and type names.
   - Search for specific type names with regular expression.
@@ -42,6 +42,8 @@ npm i @kt-graph/core
 pnpm i -g @kt-graph/cli
 ```
 <sup>Wondering why not **npm**? - Read [Known issues](#known-issues) for more details.</sup>
+
+You also need to install [GraphViz](http://www.graphviz.org). The easiest way to do this on macOS is by `brew install graphviz`.
 
 ### Synopsis
 
