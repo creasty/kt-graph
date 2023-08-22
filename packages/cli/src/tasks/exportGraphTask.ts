@@ -15,12 +15,13 @@ export function exportGraphTask(params: {
   workingDir: string;
   output: string;
   cluster: boolean;
+  highlights?: string[];
 }): ListrTask<ExportGraphTaskContext, ListrDefaultRenderer> {
   return {
     title: "Exporting graph",
     enabled: (ctx) => Boolean(ctx.project && ctx.graph),
     task: async (ctx, task) => {
-      const highlighter = createHighlighter(ctx.project!.highlights);
+      const highlighter = createHighlighter(params.highlights ?? [], ctx.project!.highlights ?? []);
 
       const g = makeGraphviz(ctx.graph!, {
         highlighter,
@@ -91,18 +92,24 @@ function formatIdentLabel(ident: string) {
   );
 }
 
-function createHighlighter(highlights?: string[]) {
-  const rules = highlights?.map((pattern, i) => {
+function createHighlighter(arbitraryHighlights: string[], configHighlights: string[]) {
+  // Config highlights should have a consistent color regardless of arbitrary highlights
+  const offset = arbitraryHighlights.length;
+
+  const rules = [...arbitraryHighlights, ...configHighlights].map((pattern, i) => {
     return {
       regexp: parseRegExp(pattern),
-      color: selectRandomColor(i),
+      color: selectRandomColor(i, offset),
     };
   });
 
-  return (ident: string) => rules?.find((rule) => rule.regexp.test(ident))?.color ?? null;
+  return (ident: string) => rules.find((rule) => rule.regexp.test(ident))?.color ?? null;
 }
 
-function selectRandomColor(n: number) {
-  const hue = ((n * 137.508) % 360) / 360; // use golden angle approximation
+function selectRandomColor(n: number, offset: number) {
+  const localOffset = n < offset ? 180 : -offset;
+
+  // 137 is a golden angle approximation and also a prime number
+  const hue = (((n + localOffset) * 137) % 360) / 360;
   return `${hue},.5,.8,.5`;
 }

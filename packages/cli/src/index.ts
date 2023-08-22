@@ -12,7 +12,10 @@ import { parseRegExp } from "@kt-graph/core";
 
 const program = new Command();
 
-program.name("kt-graph").description("Analyze & visualize class/type dependencies in Kotlin codebase");
+program
+  .name("kt-graph")
+  .description("Analyze & visualize class/type dependencies in Kotlin codebase")
+  .showHelpAfterError(true);
 
 const VERSION = process.env.KT_GRAPH_VERSION;
 if (VERSION) {
@@ -57,30 +60,36 @@ program
   .argument("<project>", "Project name specified in the config file")
   .option(
     "-o, --output <file>",
-    `Output file path.\n` +
-      `Change the extension to select a different output format.\n` +
-      `Refer to https://graphviz.org/docs/outputs/ for the list of supported formats.`,
+    "Output file path.\n" +
+      "Change the extension to select a different output format.\n" +
+      "Refer to https://graphviz.org/docs/outputs/ for the list of supported formats.",
     "graph.pdf"
   )
   .option(
     "-q, --query <regexp>",
-    `Search query for type names to include in the graph.\n` +
-      `Default behavior is case sensitive. Wrap with '/•/i' to change that.\n` +
-      `Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)`
+    "Search query for type names to include in the graph.\n" +
+      "Default behavior is case sensitive. Wrap with '/•/i' to change that.\n" +
+      "Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)"
   )
   .option(
     "-e, --exclude <regexp>",
-    "Search query for type names to exclude from the graph.`+`\nRefer to --query for the syntax."
+    "Search query for type names to exclude from the graph.\n" + "Refer to --query for the syntax."
   )
   .option(
     "--forward-depth <level>",
-    `Depth of graph for forward dependencies.\n` + `Effective when --query/--exclude creates a proper subgraph`,
+    "Depth of graph for forward dependencies.\n" + "Effective when --query/--exclude creates a proper subgraph.",
     "3"
   )
   .option(
     "--inverse-depth <level>",
-    `Depth of graph for inverse dependencies.\n` + `Refer to --forward-depth for more detail`,
+    "Depth of graph for inverse dependencies.\n" + "Refer to --forward-depth for more detail.",
     "3"
+  )
+  .option(
+    "-H, --highlight <regexp...>",
+    "Highlight type names matching the expression.\n" +
+      "This takes precedence of the same parameters in the config file.\n" +
+      "Refer to --query for the syntax."
   )
   .option("-c, --cluster", "Enable cluster layout", false)
   .option("--update", "Update the dependency table (Shortcut to run analyze command together)", false)
@@ -94,7 +103,7 @@ program
           projectName,
         }),
         loadTableTask({
-          update: options.update,
+          update: Boolean(options.update),
         }),
         applyTableFilterTask(),
         calculateGraphTask({
@@ -106,7 +115,8 @@ program
         exportGraphTask({
           workingDir,
           output: options.output,
-          cluster: !!options.cluster,
+          cluster: Boolean(options.cluster),
+          highlights: options.highlight,
         }),
       ],
       {

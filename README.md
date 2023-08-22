@@ -69,24 +69,27 @@ Usage: kt-graph generate|g [options] <project>
 Generate a graph from the dependency table
 
 Arguments:
-  project                  Project name specified in the config file
+  project                      Project name specified in the config file
 
 Options:
-  -o, --output <file>      Output file path.
-                           Change the extension to select a different output format.
-                           Refer to https://graphviz.org/docs/outputs/ for the list of supported formats. (default: "graph.pdf")
-  -q, --query <regexp>     Search query for type names to include in the graph.
-                           Default behavior is case sensitive. Wrap with '/•/i' to change that.
-                           Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)
-  -e, --exclude <regexp>   Search query for type names to exclude from the graph.`+`
-                           Refer to --query for the syntax.
-  --forward-depth <level>  Depth of graph for forward dependencies.
-                           Effective when --query/--exclude creates a proper subgraph (default: "3")
-  --inverse-depth <level>  Depth of graph for inverse dependencies.
-                           Refer to --forward-depth for more detail (default: "3")
-  -c, --cluster            Enable cluster layout (default: false)
-  --update                 Update the dependency table (Shortcut to run analyze command together) (default: false)
-  -h, --help               display help for command
+  -o, --output <file>          Output file path.
+                               Change the extension to select a different output format.
+                               Refer to https://graphviz.org/docs/outputs/ for the list of supported formats. (default: "graph.pdf")
+  -q, --query <regexp>         Search query for type names to include in the graph.
+                               Default behavior is case sensitive. Wrap with '/•/i' to change that.
+                               Example: 'foo|bar' (case sensitive), '/foo|bar/i' (case insensitive)
+  -e, --exclude <regexp>       Search query for type names to exclude from the graph.
+                               Refer to --query for the syntax.
+  --forward-depth <level>      Depth of graph for forward dependencies.
+                               Effective when --query/--exclude creates a proper subgraph. (default: "3")
+  --inverse-depth <level>      Depth of graph for inverse dependencies.
+                               Refer to --forward-depth for more detail. (default: "3")
+  -H, --highlight <regexp...>  Highlight type names matching the expression.
+                               This takes precedence of the same parameters in the config file.
+                               Refer to --query for the syntax.
+  -c, --cluster                Enable cluster layout (default: false)
+  --update                     Update the dependency table (Shortcut to run analyze command together) (default: false)
+  -h, --help                   display help for command
 ```
 
 ### Configuration file
@@ -133,10 +136,6 @@ projects:
     unifyRules:
       - ["\\.Companion\\b", ""]
       - ["(exposed\\.sql\\.Op)\\.\\w+", "$1"]
-    highlights:
-      - "Op"
-      - "Function"
-      - "Type"
 ```
 
 3\. Analyze kotlin files and build a dependency table.
@@ -178,6 +177,20 @@ $ kt-graph generate all -o math.svg -c -q '/math/i'
     Total edges: 78
 ✔ Exporting graph
   › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/math.svg'
+```
+
+```sh-session
+$ kt-graph generate all -o hl.svg -c -q '/transaction/i' -H 'Op' 'Function' 'Type'
+✔ Load config
+✔ Loading dependency table
+  › Cache found: 2023-08-20T05:09:35.377Z
+✔ Applying table filters
+✔ Calculating graph
+  › Matching nodes: 7
+    Total nodes: 141
+    Total edges: 358
+✔ Exporting graph
+  › Graph exported to '/Users/creasty/go/src/github.com/JetBrains/Exposed/hl.svg'
 ```
 
 ## Known issues
